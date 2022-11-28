@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 dir_path = r"simulation_outputs/10MHz/"
-file_names = [f"{dir_path}testset3_{i}.txt" for i in ["LO_I", "LO_Q", "RF"]]
+file_names = [f"{dir_path}testset4_{i}.txt" for i in ["LO_I", "LO_Q", "RF"]]
 
 
 N_samples = [4, 4, 8]
@@ -13,9 +13,9 @@ fs = [800e6, 800e6, 1600e6]
 f_test = 10e6
 TX_phase = ["00", "01", "11", "10"]
 
-sim_params = {'f': f_test, 'TX_phase': "00", 'RX_phase': "11"}
+sim_params = {'f': f_test, 'TX_phase': "00", 'RX_phase': "10"}
 
-output_names = [f"{int(f_test/1e6)}MHz_{i}_output_decimal_RX00.txt" for i in ["LO_I", "LO_Q", "RF"]]
+output_names = [f"{int(f_test/1e6)}MHz_{i}_output_decimal_RX10.txt" for i in ["LO_I", "LO_Q", "RF"]]
 
 
 """# Save data to decimal
@@ -46,7 +46,7 @@ fig1_ax1.plot(RF_data[0,:], RF_data[1,:], label="RF - ISIM")
 t_RX = IQ_data[0, ::8, 0]
 t_TX = RF_data[0, ::8]
 w = 2*np.pi*f_test
-RX_phase = 5 * np.pi / 4
+RX_phase = 3 * np.pi / 4
 TX_phase = 5 * np.pi / 4
 
 
@@ -56,16 +56,17 @@ RF_python = RF_data.max() * np.sin(w * t_TX + TX_phase)
 
 fig1_ax1.set_prop_cycle(None)
 
-offset = {'RX_00': np.array([0.5, 1, 0.5])*1e-8, 'RX_11': np.array([0.5, 1, 0.5])*1e-8}
+offset = {'RX_00': np.array([0.5, 1, 0.5])*1e-8, 'RX_01': np.array([1, 1, -0.5])*1e-8,
+          'RX_10': np.array([1, 1, 1])*1e-8,  'RX_11': np.array([0.5, 1, 0.5])*1e-8}
 
-dataset_lbl = "RX_00"
+dataset_lbl = "RX_10"
 
-fig1_ax1.plot(t_RX-offset[dataset_lbl][0], I_python, ".", label="I: sin($\omega t + 5\pi/4$)")
-fig1_ax1.plot(t_RX-offset[dataset_lbl][1], Q_python, ".", label="Q: (-1)cos($\omega t + 5\pi/4$)")
+fig1_ax1.plot(t_RX-offset[dataset_lbl][0], I_python, ".", label="I: sin($\omega t + 3\pi/4$)")
+fig1_ax1.plot(t_RX-offset[dataset_lbl][1], Q_python, ".", label="Q: (-1)cos($\omega t + 3\pi/4$)")
 fig1_ax1.plot(t_TX-offset[dataset_lbl][2], RF_python, ".", label="RF: sin($\omega t + 5\pi/4$)")
 
 fig1_ax1.set_xlabel("t (s)")
 fig1_ax1.set_ylabel("signal")
 fig1_ax1.set_title("10MHz ISIM and Python outputs for signal_generator_tb.v\n"
-                   "$\phi_{TX}$ = 00, $\phi_{RX} = 00$")
+                   "$\phi_{TX}$ = 00, $\phi_{RX} = 10$")
 fig1_ax1.legend()
