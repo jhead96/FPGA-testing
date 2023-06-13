@@ -1,1 +1,1 @@
-Code for testing FPGA outputs from ISIM simulations and physical measurements.
+Python code for generating FPGA NMR spectrometer test signals and analyzing ISIM simulation outputs.
